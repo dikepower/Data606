@@ -1,0 +1,193 @@
+---
+title: "Lab0"
+author: "GuangQiu"
+date: "September 1, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##Fetch data from Data606
+
+
+```{r}
+source("more/arbuthnot.R")
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r}
+arbuthnot
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+##check the dimensions of this data frame by typing
+
+```{r}
+dim(arbuthnot)
+```
+## check the names of these columns (or variables) 
+```{r}
+names(arbuthnot)
+```
+
+
+## select signal column from dataset 
+```{r}
+arbuthnot$boys
+```
+
+## Exercise 1 What command would you use to extract just the counts of girls baptized? Try it!
+
+```{r}
+arbuthnot$girls
+```
+
+##  a simple plot of the number of girls baptized per year with the command
+
+
+```{r}
+plot(x = arbuthnot$year, y = arbuthnot$girls)
+
+```
+
+## Exericise 2 : Is there an apparent trend in the number of girls baptized over the years?
+##How would you describe it?
+```{r}
+# Yes. We can figure the trend through the plot . 
+# The number of girls was around 4000 to 5000 before 1640. 
+# It decreased to around 3000 between 1650 and 1660.
+# After that, it gradually increased to more than 7000 after 1660
+
+plot(x = arbuthnot$year, y = arbuthnot$girls, type ="l")
+
+```
+#calu
+```{r}
+5218 + 4683
+```
+##calc all sums
+```{r}
+arbuthnot$boys + arbuthnot$girls
+```
+
+# can make a plot of the total number of baptisms per year
+
+```{r}
+plot(arbuthnot$year, arbuthnot$boys + arbuthnot$girls, type = "l")
+```
+##division 
+```{r}
+5218 / 4683
+arbuthnot$boys / arbuthnot$girls
+```
+
+#proportion 
+```{r}
+5218 / (5218 + 4683)
+arbuthnot$boys / (arbuthnot$boys + arbuthnot$girls)
+
+```
+
+##Exericise 3 
+#Now, make a plot of the proportion of boys over time. What do you see?  
+
+
+```{r}
+plot(arbuthnot$year, arbuthnot$boys / (arbuthnot$boys + arbuthnot$girls), type = "l")
+
+# the proportion of boys was between 0.505 and 0.535 over time .  
+```
+
+
+
+
+##Own 
+
+##load the datA 
+
+```{r}
+source("more/present.R")
+```
+
+
+
+#What years are included in this data set? What are the dimensions of the data frame and what are the variable or column names?
+```{r}
+#Years included in the dataset
+
+present$year
+
+#dim of the data frame
+print ("dim of the data frame " )
+
+dim(present)
+
+#variable names
+print("variable names")
+names(present)
+
+```
+
+
+
+#How do these counts compare to Arbuthnot’s? Are they on a similar scale?
+The arbuthnot scale was in 10 thousands, present are in the millions
+
+```{r}
+present
+```
+
+
+
+
+#Make a plot that displays the boy-to-girl ratio for every year in the data set. What do you see? Does Arbuthnot’s observation about boys being born in greater proportion than girls hold up in the U.S.? Include the plot in your response.
+
+
+```{r}
+plot(present$year, present$boys / (present$boys + present$girls), type ="l", col="red")
+
+plot(arbuthnot$year, arbuthnot$boys / (arbuthnot$boys + arbuthnot$girls), type = "l", col="green")
+
+#the boy to girls ratio was slightly decreased between 1940 and 2000.   Arbuthnot’s observation about boys being born in greater proportion than girls did not hold up in the U.S.   
+
+```
+
+
+#In what year did we see the most total number of births in the U.S.? You can refer to the help files or the R reference card http://cran.r-project.org/doc/contrib/Short-refcard.pdf to find helpful commands.
+
+```{r}
+plot(present$year, (present$boys + present$girls), type ="l")
+
+print(present[[which.max(present$boys+present$girls),1]])
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
