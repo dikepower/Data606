@@ -1,0 +1,216 @@
+---
+title: "Data606 Lab1 : Introduction to data"
+Author: Guang 
+output:
+  html_document:
+    theme: cerulean
+    highlight: pygments
+    css: ./lab.css
+---
+
+
+```{r load-data, eval=TRUE}
+source("more/cdc.R")
+```
+
+ 
+
+1.  How many cases are there in this data set?  How many variables?  For each 
+    variable, identify its data type (e.g. categorical, discrete).
+    
+```{r}
+numRows <- nrow(cdc)
+cat('Num Cases: ',numRows)
+
+numVars <- ncol(cdc)
+cat('Num Variables: ',numVars)
+
+str(cdc)
+```
+    
+  
+ 
+
+2.  Create a numerical summary for `height` and `age`, and compute the interquartile range for each. Compute the relative frequency distribution for     `gender` and `exerany`. How many males are in the sample? What proportion of the sample reports being in excellent health?
+
+
+numerical summary for height
+```{r}
+summary(cdc$height)
+
+```
+
+numerical summary for age 
+```{r}
+summary(cdc$age)
+```
+
+interquartile range of height
+```{r}
+IQR(cdc$height)
+```
+
+interquartile range of age
+```{r}
+IQR(cdc$age)
+```
+
+
+relative frequency distribution for gender 
+```{r}
+table(cdc$gender) / nrow(cdc)
+```
+
+relative frequency distribution for gender
+
+```{r}
+table(cdc$gender) / nrow(cdc)
+```
+
+The relative frequency for exerany is
+
+```{r}
+table(cdc$exerany)/20000
+```
+The number of males in the sample is
+```{r}
+table(cdc$gender)
+```
+
+ 
+
+3.  What does the mosaic plot reveal about smoking habits and gender? 
+
+## Answer:More men have reported to smoke at least 100 cigarettes.
+ 
+
+4.  Create a new object called `under23_and_smoke` that contains all observations
+    of respondents under the age of 23 that have smoked 100 cigarettes in their 
+    lifetime. Write the command you used to create the new object as the answer
+    to this exercise.
+    
+    
+```{r}
+under23_and_smoke <-subset(cdc,age>=23& smoke100==1)
+summary(under23_and_smoke)
+```
+
+ 
+5.  What does this box plot show? Pick another categorical variable from the data set and see how it relates to BMI. List the variable you chose, why you might think it would have a relationship to BMI,  and indicate what the figure seems to suggest. 
+
+
+#Answer: The box plot showed the BMI inversely correlated with the reported health condition
+#As what was shown in the figure, there is possible negative relationship between exerany with BMI . 
+
+```{r}
+bmi <- (cdc$weight/cdc$height^2)*703
+boxplot(bmi ~ cdc$exerany)
+boxplot(bmi ~ cdc$hlthplan)
+```
+ 
+
+* * *
+
+## On Your Own
+
+# Make a scatterplot of weight versus desired weight. Describe the relationship between these two variables.
+
+
+```{r}
+plot(cdc$weight, cdc$wtdesire)
+```
+
+# There is a positive correlation between weight and desired weight, which suggestes people with higher weight have much high desire to loss weight. 
+
+
+-   Let's consider a new variable: the difference between desired weight  (`wtdesire`) and current weight (`weight`). Create this new variable by subtracting the two columns in the data frame and assigning them to a new bject called `wdiff`.
+
+
+```{r}
+wdiff <- (cdc$wtdesire - cdc$weight)
+```
+
+
+-   What type of data is `wdiff`? If an observation `wdiff` is 0, what does this mean about the person's weight and desired weight. What if `wdiff` is positive or negative?
+
+```{r}
+summary(wdiff)
+```
+
+
+
+
+#wdiff is numerical  discrete variable 
+#wdiff= 0:  subject was satisfied with their current weight
+#wdiff< 0:  subject wanted to loss weight
+#wdiff> 0:  subject wanted to gain weight
+ 
+
+
+-   Describe the distribution of `wdiff` in terms of its center, shape, and spread, including any plots you use. What does this tell us about how people feel about their current weight?
+
+
+```{r}
+boxplot(wdiff)
+```
+```{r}
+hist(wdiff,breaks = 50)
+```
+
+The majority of submects were close to their ideal weight, with a few extreme cases.  
+```{r}
+summary(wdiff)
+```
+Based on the data above, it seems that it's typical for people to want to lose around 10 to 15 pounds. 
+
+
+-   Using numerical summaries and a side-by-side box plot, determine if men tend to view their weight differently than women.
+```{r}
+mwdiff <- subset(cdc, gender == "m", select = c(wtdesire, weight))
+summary(mwdiff)
+```
+```{r}
+fwdiff <- subset(cdc, gender == "f", select = c(wtdesire, weight))
+summary(fwdiff)
+```
+
+```{r}
+
+boxplot(wdiff ~ cdc$gender)
+```
+
+Based on the data above , it showed more women would like to lose weight than men.
+
+
+
+-   Now it's time to get creative. Find the mean and standard deviation of `weight` and determine what proportion of the weights are within one standard deviation of the mean.
+
+```{r}
+mean.Weight = mean(cdc$weight)
+std.Weight  = sd(cdc$weight)
+mean.Weight
+std.Weight
+```
+
+```{r}
+Within.OneSD =subset(cdc, weight < (mean.Weight + std.Weight) & weight > (mean.Weight -std.Weight))
+dim(Within.OneSD)[1]/dim(cdc)[1]
+
+```
+
+mean of weight = 169.7
+
+standard deviation = 40.08
+
+proportion within one standard deviation of the mean = .7076
+
+
+
+
+
+<div id="license">
+This is a product of OpenIntro that is released under a 
+[Creative Commons Attribution-ShareAlike 3.0 Unported](http://creativecommons.org/licenses/by-sa/3.0). 
+This lab was adapted for OpenIntro by Andrew Bray and Mine &Ccedil;etinkaya-Rundel 
+from a lab written by Mark Hansen of UCLA Statistics.
+</div>
