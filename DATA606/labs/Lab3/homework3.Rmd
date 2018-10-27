@@ -1,0 +1,246 @@
+---
+title: "Homework 3"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+ #load library 
+```{r}
+library(ggplot2)
+library(DATA606)
+```
+ 
+ 3.2 Area under the curve, Part II. What percent of a standard normal distribution N(µ = 0, ! = 1) is found in each region? Be sure to draw a graph.
+*(a) - Z > !1.13
+
+```{r}
+print (paste ('The probability is: ', pnorm(-1.13, mean = 0, sd=1, lower.tail = FALSE)))
+```
+
+
+
+```{r}
+normalPlot(mean = 0, sd = 1, bounds=c(-1.13,4), tails = FALSE)
+```
+ ##(b) Z < 0.18
+```{r}
+print (paste ('The probability is: ', pnorm(0.18, mean = 0, sd = 1)))
+```
+
+#visualization
+
+```{r}
+normalPlot(mean = 0, sd = 1, bounds = c(0.18), tails = TRUE)
+```
+ 
+ 
+ (c) Z > 8
+ 
+```{r}
+print (paste ('The probability is: ', pnorm(8, mean = 0, sd = 1, lower.tail = FALSE)))
+```
+ 
+ #visulaztion 
+```{r}
+normalPlot(mean = 0, sd = 1, bounds = c(8, 9))
+```
+ 
+ 
+ (d) |Z| < 0.5
+ 
+ 
+```{r}
+print (paste ('The probability is: ', pnorm(0.5, mean = 0, sd = 1) - pnorm(-0.5, mean = 0, sd = 1)))
+```
+ 
+# Probability curve plot 
+ 
+```{r}
+normalPlot(mean = 0, sd = 1, bounds = c(-0.5, 0.5))
+```
+ 
+33.4 Triathlon times, Part I.
+
+#### (a) Men, Ages 30-34: N(μ=4313,σ=583), and Women, Ages 25-29: N(μ=5261,σ=807)
+
+#### (b)  Answer: As what was shown below , Leo finished the race about 1.09 standad deviations above the mean, while Mary finished the race about 0.31 standard deviations above the mean.
+```{r}
+print (paste0("Leo's Z score :", (4948-4313)/583))
+print (paste0("Mary's Z score :", (5513-5261)/807))
+```
+
+#### (c)  Did Leo or Mary rank better in their respective groups? Explain your reasoning.
+##### Answer: Relative to their own group, Mary did better than Leo since Mary’s z-score is closer to the mean, which indicates a faster finish time. Because this is a race, a negative z-score would indicate a faster finish time.
+
+
+#### (d) What percent of the triathletes did Leo finish faster than in his group?
+##### Answer: Leo’s Z-score corresponds to probability 0.8619672. Since higher Z-score corresponds to slower finish, Leo finished faster than 1−0.8619672=0.1380328  or 13.8%.
+
+
+####. (e) What percent of the triathletes did Mary finish faster than in her group?
+##### Mary finished faster than 37.74% of the triathletes in her group.
+```{r}
+1- pnorm(5531, mean=5261, sd=807)
+```
+
+
+
+#### If the distributions of finishing times are not nearly normal, would your answers to parts (b) - (e) change? Explain your reasoning.
+##### Answer: If distributions are not nearly normal, then part (b) will remain the same since Z-scores can still be calculated. However, parts (d) and (e) rely on the normal model for calculations, so the results would change.
+
+
+## 3.18 Heights of female college students.
+Below are heights of 25 female college students.
+54,55,56,56,57,58,58,59,60,60,60,61,61,62,62,63,63,63,64,65,65,67,67,69,73
+(a) The mean height is 61.52 inches with a standard deviation of 4.58 inches. Use this information to determine if the heights approximately follow the 68-95-99.7% Rule.
+
+#### (a) The mean height is 61.52 inches with a standard deviation of 4.58 inches. Use this information to determine if the heights approximately follow the 68-95-99.7% Rule.
+The data set approximately follow the 68-95-99.7% rule.
+
+Findings based on calculations below:
+
+68% fall within 1 standard deviation
+96% fall within 2 standard deviations
+100% fall within 3 standard deviations
+
+#### Heigth Mean 
+```{r}
+heights <- c(54, 55, 56, 56, 57, 58, 58, 59, 60, 60, 60, 61, 61, 
+             62, 62, 63, 63, 63, 64, 65, 65, 67, 67, 69, 73)
+mean_height <- mean(heights)
+mean_height
+```
+#### Heigth SD
+```{r}
+sd_height <- sd(heights)
+sd_height
+```
+```{r}
+qqnormsim(heights)
+```
+
+
+
+```{r}
+within.1sd <- heights[which(heights < mean_height + sd_height & heights > mean_height - sd_height)]
+within.2sd <- heights[which(heights < mean_height + 2*sd_height & heights > mean_height - 2*sd_height)]
+within.3sd <- heights[which(heights < mean_height + 3*sd_height & heights > mean_height - 3*sd_height)]
+print (paste0("1sd range : ",length(within.1sd)/length(heights)))
+print (paste0("2sd range : ",length(within.2sd)/length(heights)))
+print (paste0("3sd range : ",length(within.3sd)/length(heights)))
+
+```
+
+### (b) Do these data appear to follow a normal distribution? Explain your reasoning using the graphs provided below.
+
+Answer:  The sample size of the dataset(n=25) is too small, but the histogram resembles a normal distribution. The normal probability plot mostly stay within a the straight line with some amount of deviation from the line. The data set is too small, and this kind of deviation is to be expected.
+
+
+## 3.22 Defective rate.
+#### A machine that produces a special type of transistor (a component of computers) has a 2% defective rate. The production is considered a random process where each transistor is independent of the others.
+
+ #### Probability of success (p) is .02 –> defective transistor
+ #### Probability of failure is .98 –> not defective transistor
+
+
+### (a) What is the probability that the 10th transistor produced is the first with a defect?
+The probability that the 10th transistor is the first with a defect is 1.67%
+```{r}
+print (paste0("probability that the 10th transistor: " , (1-.02)^9 * .02 ))
+```
+
+### (b) What is the probability that the machine produces no defective transistors in a batch of 100?
+
+```{r}
+
+
+print (paste0("The probability that there are no defective transistors in a batch of 100 is : ", (1-.02)^100))
+```
+
+###  (c) On average, how many transistors would you expect to be produced before the first with a defect? What is the standard deviation?
+#### We would expect to see 50 transistors without defect before the first one with a defect.
+#### The standard deviation is 49.50
+
+```{r}
+print (paste0("Mean : ", 1/0.2))
+print (paste0("SD : ", sqrt((1-.02)/(.02^2))))
+```
+
+### (d) Another machine that also produces transistors has a 5% defective rate where each transistor is produced independent of the others. On average how many transistors would you expect to be produced with this machine before the first with a defect? What is the standard deviation?
+Probability of success (p) is .05 –> defective transisitor
+Probability of failure is .95 –> not defective transistor
+We would expect to see 20 nondefective transistors before seeing the first defective one.
+
+```{r}
+print (paste0("Mean : ", 1/.05))
+
+```
+
+The standard deviation is 19.49359.
+```{r}
+print (paste0("SD : ", sqrt((1-.05)/(.05^2))))
+```
+
+### e) Based on your answers to parts (c) and (d), how does increasing the probability of an event affect the mean and standard deviation of the wait time until success?
+
+Increasing the probability of the “successful” event decreases the wait time and the standard deviation. The ratio between standard deviation to mean decreases. This suggests to me that as the probability increases, the variability in the wait time becomes less spread out. Below you will see the ratio between standard deviation and mean decrease as probability of success increases.
+
+
+## 3.38 Male children.
+While it is often assumed that the probabilities of having a boy or a girl are the same, the actual probability of having a boy is slightly higher at 0.51. Suppose a couple plans to have 3 kids.
+
+### (a) Use the binomial model to calculate the probability that two of them will be boys.
+ * success = having a boy
+ * probability of success, p = 0.51
+ * n = 3
+ * k = 2
+#### The probablity of having 2 boys in 3 children: 38.23%
+
+```{r}
+choose(3,2) * (0.51)^2 * (1 - 0.51) #0.382347
+```
+
+### (b) Write out all possible orderings of 3 children, 2 of whom are boys. Use these scenarios to calculate the same probability from part (a) but using the addition rule for disjoint outcomes. Confirm that your answers from parts (a) and (b) match.
+
+```{r}
+p1 <- (0.51) * (0.51) * (1 - .51)
+print (paste0("P(Boy, Boy, Girl): ", p1))
+p2 <- (0.51) * (1 - 0.51) * (0.51)
+print (paste0("P(Boy, Girl, Boy) : ", p2))
+
+p3 <- (1 - 0.51) * (0.51) * (0.51)
+print (paste0("P(Girl, Boy, Boy): ", p3))
+print (paste0("Total_probility: ", p1+p2+p3))
+print ("(a) and (b) results matched ")
+```
+
+### (c) If we wanted to calculate the probability that a couple who plans to have 8 kids will have 3 boys, briefly describe why the approach from part (b) would be more tedious than the approach from part (a).
+
+##### Answer: Part B would be more tedicious because you would have to write out 8 different equations with 8 different probabilities.
+
+
+
+## 3.42 Serving in volleyball. 
+### A not-so-skilled volleyball player has a 15% chance of making the serve, which involves hitting the ball so it passes over the net on a trajectory such that it will land in the opposing team’s court. Suppose that her serves are independent of each other.
+
+*###* p = .15 (success = make a successful serve)
+### (a) What is the probability that on the 10th try she will make her 3rd successful serve?
+
+```{r}
+p <-  choose(9,2) * (.15)^2 * (1 - .15)^(9-2) * (.15)
+print (paste0("The probability that on the 10th try she will make her 3rd successful serve: ", p))
+```
+
+### b) Suppose she has made two successful serves in nine attempts. What is the probability that her 10th serve will be successful?
+
+#### Answer: Each event is independent of one another, the probability of her 10th serve being successful is 15%
+
+### (c) Even though parts (a) and (b) discuss the same scenario, the probabilities you calculated should be different. Can you explain the reason for this discrepancy? 
+
+#### It is because that part a was looking for a specific combination of successes with serving. and part b was only concerned with one serve.
+
+
